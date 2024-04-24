@@ -1,38 +1,92 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
-
-const restaurantInfo = require('../utils/rest-info.json');
+import Search from './Search';
 
 const FilterButton = (props) => {
-  const { title, onClick } = props;
+  const { title, onClick, disabled = false } = props;
   return (
-    <button className="filter-btn" onClick={onClick}>
+    <button className="filter-btn" onClick={onClick} disabled={disabled}>
       {title}
     </button>
   );
 };
 
+const ShimmerRestaurants = () => {
+  return (
+    <>
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+      <RestaurantCard />
+    </>
+  );
+};
+
 const Body = () => {
-  const [restInfo, setRestInfo] = useState(restaurantInfo);
+  const [restInfo, setRestInfo] = useState([]);
 
-  const topRatedFilter = useCallback(() => {
-    setRestInfo(
-      restInfo.filter((restaurant) => restaurant.info.avgRating >= 4)
+  const [filteredRestInfo, setFilteredRestInfo] = useState([]);
+
+  const [filterStatus, setFilterStatus] = useState('');
+
+  const topRatedFilter = () => {
+    setFilteredRestInfo(
+      restInfo.filter((restaurant) => restaurant.info.avgRating > 4.2)
     );
-  }, [restInfo, setRestInfo]);
+    setFilterStatus('Top Rated Restaurants');
+  };
 
-  const clearFilter = useCallback(() => {
-    setRestInfo(restaurantInfo);
-  }, [setRestInfo]);
+  const searchFilter = (searchText) => {
+    setFilteredRestInfo(
+      restInfo.filter((restaurant) =>
+        restaurant.info.name.toLowerCase().includes(searchText)
+      )
+    );
+    setFilterStatus(`Search Results: ${searchText}`);
+  };
+
+  const clearFilter = (newRestInfo) => {
+    setFilteredRestInfo(newRestInfo || restInfo);
+    setFilterStatus('');
+  };
+
+  useEffect(async () => {
+    try {
+      const response = await fetch('http://localhost:3000/restaurants');
+      const data = await response.json();
+      const newRestInfo =
+        data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants || [];
+      setRestInfo(newRestInfo);
+      clearFilter(newRestInfo);
+    } catch (err) {
+      console.log('Error while loading data.', err);
+    }
+  }, []);
 
   return (
     <div className="body">
       <div className="filters">
+        <Search onSearch={searchFilter} />
         <FilterButton title="Top Rated Restaurants" onClick={topRatedFilter} />
-        <FilterButton title="Clear Filters" onClick={clearFilter} />
+        <FilterButton title="Clear Filters" onClick={() => clearFilter()} />
+      </div>
+      <div className="filter-status-container">
+        {filterStatus.length > 0 && (
+          <h3 className="filter-status">{filterStatus}</h3>
+        )}
       </div>
       <div className="restaurant-container">
-        {restInfo.map((restaurant) => (
+        {!restInfo.length && <ShimmerRestaurants />}
+        {filteredRestInfo.map((restaurant) => (
           <RestaurantCard key={restaurant.info.id} resInfo={restaurant.info} />
         ))}
       </div>
