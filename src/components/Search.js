@@ -9,7 +9,7 @@ const Search = (props) => {
   };
 
   const search = () => {
-    onSearch(searchText.toLowerCase());
+    searchText.length && onSearch(searchText.toLowerCase());
   };
 
   const onSubmit = () => {

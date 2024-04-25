@@ -12,22 +12,7 @@ const FilterButton = (props) => {
 };
 
 const ShimmerRestaurants = () => {
-  return (
-    <>
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-      <RestaurantCard />
-    </>
-  );
+  return <>{new Array(12).fill(<RestaurantCard />)}</>;
 };
 
 const Body = () => {
