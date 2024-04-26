@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
 import Search from './Search';
+import { API } from '../utils/urls';
 
 const FilterButton = (props) => {
   const { title, onClick, disabled = false } = props;
@@ -12,10 +13,16 @@ const FilterButton = (props) => {
 };
 
 const ShimmerRestaurants = () => {
-  return <>{new Array(12).fill(<RestaurantCard />)}</>;
+  return (
+    <>
+      {new Array(12).fill('').map((_, i) => (
+        <RestaurantCard key={i} />
+      ))}
+    </>
+  );
 };
 
-const Body = () => {
+const Home = () => {
   const [restInfo, setRestInfo] = useState([]);
 
   const [filteredRestInfo, setFilteredRestInfo] = useState([]);
@@ -43,18 +50,22 @@ const Body = () => {
     setFilterStatus('');
   };
 
-  useEffect(async () => {
+  const fetchAndUpdate = async () => {
     try {
-      const response = await fetch('http://localhost:3000/restaurants');
-      const data = await response.json();
+      const response = await fetch(API.restaurantList());
+      const json = await response.json();
       const newRestInfo =
-        data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
+        json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants || [];
       setRestInfo(newRestInfo);
       clearFilter(newRestInfo);
     } catch (err) {
       console.log('Error while loading data.', err);
     }
+  };
+
+  useEffect(() => {
+    fetchAndUpdate();
   }, []);
 
   return (
@@ -79,4 +90,4 @@ const Body = () => {
   );
 };
 
-export default Body;
+export default Home;
