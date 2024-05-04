@@ -14,9 +14,9 @@ const RestaurantCard = (props) => {
           alt={`${name} Logo`}
         />
         <h3>{name}</h3>
-        <h5>{cuisines.join(', ')}</h5>
-        <h5>{avgRatingString} stars</h5>
-        <h5>{sla.slaString}</h5>
+        <p>{cuisines.join(', ')}</p>
+        <p>{avgRatingString} stars</p>
+        <p>{sla.slaString}</p>
       </Link>
     </div>
   ) : (

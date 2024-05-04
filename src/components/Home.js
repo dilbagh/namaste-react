@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
 import Search from './Search';
-import { API } from '../utils/urls';
+import { SWIGGY_API } from '../utils/urls';
 
 const FilterButton = (props) => {
   const { title, onClick, disabled = false } = props;
@@ -52,7 +52,7 @@ const Home = () => {
 
   const fetchAndUpdate = async () => {
     try {
-      const response = await fetch(API.restaurantList());
+      const response = await fetch(SWIGGY_API.restaurantList());
       const json = await response.json();
       const newRestInfo =
         json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle

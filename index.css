@@ -9,7 +9,7 @@ a {
   background-color: lightsteelblue;
 }
 .logo {
-  width: 200px;
+  width: 150px;
   mix-blend-mode: darken;
 }
 .nav-items > ul {
@@ -59,4 +59,34 @@ a {
 }
 .filter-status {
   text-align: center;
+}
+.github-user {
+  width: 200px;
+  border: 1px solid transparent;
+  background-color: lightgray;
+  padding: 5px;
+  margin: 5px;
+  min-height: 300px;
+}
+.github-user:hover {
+  border: 1px solid black;
+  cursor: pointer;
+}
+.github-avatar {
+  width: 100%;
+}
+.credits {
+  display: flex;
+  justify-content: center;
+}
+.credit {
+  margin: 0px 50px;
+}
+.credit-heading {
+  text-align: center;
+}
+.github-handle-logo {
+  width: 15px;
+  height: 15px;
+  margin: 0px 5px 0px 0px;
 }
