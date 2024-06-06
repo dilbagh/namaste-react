@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
 import Search from './Search';
-import { SWIGGY_API } from '../utils/urls';
+import useRestaurantList from '../utils/useRestaurantList';
 
 const FilterButton = (props) => {
   const { title, onClick, disabled = false } = props;
@@ -23,7 +23,7 @@ const ShimmerRestaurants = () => {
 };
 
 const Home = () => {
-  const [restInfo, setRestInfo] = useState([]);
+  const restInfo = useRestaurantList();
 
   const [filteredRestInfo, setFilteredRestInfo] = useState([]);
 
@@ -45,35 +45,21 @@ const Home = () => {
     setFilterStatus(`Search Results: ${searchText}`);
   };
 
-  const clearFilter = (newRestInfo) => {
-    setFilteredRestInfo(newRestInfo || restInfo);
+  const clearFilter = () => {
+    setFilteredRestInfo(restInfo);
     setFilterStatus('');
   };
 
-  const fetchAndUpdate = async () => {
-    try {
-      const response = await fetch(SWIGGY_API.restaurantList());
-      const json = await response.json();
-      const newRestInfo =
-        json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
-          ?.restaurants || [];
-      setRestInfo(newRestInfo);
-      clearFilter(newRestInfo);
-    } catch (err) {
-      console.log('Error while loading data.', err);
-    }
-  };
-
   useEffect(() => {
-    fetchAndUpdate();
-  }, []);
+    clearFilter();
+  }, [restInfo]);
 
   return (
     <div className="body">
       <div className="filters">
         <Search onSearch={searchFilter} />
         <FilterButton title="Top Rated Restaurants" onClick={topRatedFilter} />
-        <FilterButton title="Clear Filters" onClick={() => clearFilter()} />
+        <FilterButton title="Clear Filters" onClick={clearFilter} />
       </div>
       <div className="filter-status-container">
         {filterStatus.length > 0 && (

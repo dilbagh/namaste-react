@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { SWIGGY_API } from '../utils/urls';
+import useRestaurantInfo from '../utils/useRestaurantInfo';
 
 const getRecommendedItems = (cards) => {
   return cards?.find((card) => card?.card?.card?.title === 'Recommended');
@@ -9,28 +8,12 @@ const getRecommendedItems = (cards) => {
 const RestaurantMenu = () => {
   const { restaurantId } = useParams();
 
-  const [restaurantInfo, setRestaurantInfo] = useState(undefined);
+  const restaurantInfo = useRestaurantInfo(restaurantId);
 
-  const fetchAndUpdate = async () => {
-    const response = await fetch(SWIGGY_API.menuItems([restaurantId]));
-    const json = await response.json();
-    const newRestaurantInfo = json?.data;
-    setRestaurantInfo(newRestaurantInfo);
-  };
-
-  useEffect(() => {
-    fetchAndUpdate();
-  }, []);
-
-  const cards = restaurantInfo?.cards;
-  if (!cards) {
+  if (!restaurantInfo) {
     return <></>;
   }
-
-  const restaurantName = cards[0]?.card?.card?.text;
-  const menuItems = getRecommendedItems(
-    cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
-  )?.card?.card?.itemCards;
+  const { restaurantName, menuItems } = restaurantInfo;
 
   return (
     <div className="body">
