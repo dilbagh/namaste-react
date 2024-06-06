@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
 import Search from './Search';
 import useRestaurantList from '../utils/useRestaurantList';
+import useOnlineState from '../utils/useOnlineState';
 
 const FilterButton = (props) => {
   const { title, onClick, disabled = false } = props;
@@ -29,6 +30,8 @@ const Home = () => {
 
   const [filterStatus, setFilterStatus] = useState('');
 
+  const online = useOnlineState();
+
   const topRatedFilter = () => {
     setFilteredRestInfo(
       restInfo.filter((restaurant) => restaurant.info.avgRating > 4.2)
@@ -53,6 +56,14 @@ const Home = () => {
   useEffect(() => {
     clearFilter();
   }, [restInfo]);
+
+  if (!online) {
+    return (
+      <div className="body">
+        <h1>‼️ You're not connected to the internet.</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="body">
