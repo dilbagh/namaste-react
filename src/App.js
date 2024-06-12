@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import Header from './components/Header';
 import Home from './components/Home';
@@ -6,17 +6,21 @@ import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import Contact from './components/Contact';
 import RestaurantMenu from './components/RestaurantMenu';
+import LoginContext from './utils/LoginContext';
 
 const About = lazy(() => import('./components/About'));
 
 const AppLayout = () => {
+  const [loggedInUser, setLoggedInUser] = useState('');
   return (
-    <div className="app">
-      <Header />
-      <div className="mt-28">
-        <Outlet />
+    <LoginContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+      <div className="app">
+        <Header />
+        <div className="mt-28">
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </LoginContext.Provider>
   );
 };
 

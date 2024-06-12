@@ -2,14 +2,15 @@ import { Link } from 'react-router-dom';
 import { getCDNImage } from '../utils/urls';
 
 const RestaurantCard = (props) => {
-  const { resInfo = {} } = props;
+  const { resInfo = {}, promo } = props;
   const { id, name, cuisines, cloudinaryImageId, avgRatingString, sla } =
     resInfo;
   return name ? (
     <div className="m-2 p-2 w-52 min-h-64 border rounded-lg bg-orange-100 hover:shadow-md hover:shadow-gray-500">
+      {promo && promo}
       <Link to={`/restaurants/${id}`}>
         <img
-          className="h-32 w-full"
+          className="h-32 w-full rounded-lg"
           src={getCDNImage(cloudinaryImageId)}
           alt={`${name} Logo`}
         />
@@ -23,9 +24,22 @@ const RestaurantCard = (props) => {
     </div>
   ) : (
     <div className="m-2 p-2 w-52 min-h-64 border rounded-lg bg-orange-100 hover:shadow-lg hover:shadow-gray-500">
-      <div className="h-32 w-full bg-orange-50"></div>
+      <div className="h-32 w-full rounded-lg bg-orange-50"></div>
     </div>
   );
+};
+
+export const withPromo = (RestaurantCard) => {
+  return ({ resInfo }) => {
+    const { header, subHeader } = resInfo.aggregatedDiscountInfoV3;
+    const promoText = `${header} ${subHeader || ''}`;
+    const promo = (
+      <label className="absolute bg-black text-white text-xs rounded-lg p-1 m-2 mt-24 opacity-80">
+        {promoText}
+      </label>
+    );
+    return <RestaurantCard promo={promo} resInfo={resInfo} />;
+  };
 };
 
 export default RestaurantCard;

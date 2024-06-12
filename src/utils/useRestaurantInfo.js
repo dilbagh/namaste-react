@@ -21,15 +21,20 @@ const useRestaurantInfo = (restaurantId) => {
   }
 
   const restaurantName = cards[0]?.card?.card?.text;
-  const menuItems = getRecommendedItems(
-    cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
-  )?.card?.card?.itemCards;
 
-  return { restaurantName, menuItems };
+  const categories = getCategories(
+    cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
+  );
+
+  return { restaurantName, categories };
 };
 
-const getRecommendedItems = (cards) => {
-  return cards?.find((card) => card?.card?.card?.title === 'Recommended');
+const getCategories = (cards) => {
+  return cards?.filter(
+    (card) =>
+      card?.card?.card?.['@type'] ===
+      'type.googleapis.com/swiggy.presentation.food.v2.ItemCategory'
+  );
 };
 
 export default useRestaurantInfo;

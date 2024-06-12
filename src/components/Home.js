@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import RestaurantCard from './RestaurantCard';
+import RestaurantCard, { withPromo } from './RestaurantCard';
 import Search from './Search';
 import useRestaurantList from '../utils/useRestaurantList';
 import useOnlineState from '../utils/useOnlineState';
@@ -26,6 +26,8 @@ const ShimmerRestaurants = () => {
     </>
   );
 };
+
+const PromoRestaurantCard = withPromo(RestaurantCard);
 
 const Home = () => {
   const restInfo = useRestaurantList();
@@ -87,9 +89,19 @@ const Home = () => {
       )}
       <div className="flex flex-wrap m-2 p-2 justify-center">
         {!restInfo.length && <ShimmerRestaurants />}
-        {filteredRestInfo.map((restaurant) => (
-          <RestaurantCard key={restaurant.info.id} resInfo={restaurant.info} />
-        ))}
+        {filteredRestInfo.map((restaurant) => {
+          return restaurant.info.aggregatedDiscountInfoV3?.header ? (
+            <PromoRestaurantCard
+              key={restaurant.info.id}
+              resInfo={restaurant.info}
+            />
+          ) : (
+            <RestaurantCard
+              key={restaurant.info.id}
+              resInfo={restaurant.info}
+            />
+          );
+        })}
       </div>
     </div>
   );
