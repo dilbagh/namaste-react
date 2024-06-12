@@ -13,7 +13,9 @@ const AppLayout = () => {
   return (
     <div className="app">
       <Header />
-      <Outlet />
+      <div className="mt-28">
+        <Outlet />
+      </div>
     </div>
   );
 };

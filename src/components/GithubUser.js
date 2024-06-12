@@ -22,21 +22,23 @@ class GithubUser extends React.Component {
     const { name, login, followers, following, avatar_url, html_url } =
       userInfo;
     return (
-      <div className="github-user">
+      <div className="border border-gray-400 p-2 rounded-md shadow-md hover:shadow-lg hover:shadow-gray-400">
         <a href={html_url} target="_blank">
-          <img
-            className="github-avatar"
-            src={avatar_url}
-            alt={`${name} Avatar`}
-          />
-          <div className="github-details">
-            <h3>{name}</h3>
-            <h4>
-              <img className="github-handle-logo" src={GITHUB_LOGO_URL} />
-              {login}
-            </h4>
-            <p>Followers: {followers}</p>
-            <p>Following: {following}</p>
+          <div className="flex">
+            <img
+              className="h-48 w-48 m-1 mr-3 rounded-md"
+              src={avatar_url}
+              alt={`${name} Avatar`}
+            />
+            <div className="">
+              <h3 className="font-bold text-lg mb-3 mt-1">{name}</h3>
+              <h4 className="flex font-thin font-mono text-sm mb-3">
+                <img className="size-4 mr-1 pt-1" src={GITHUB_LOGO_URL} />
+                {login}
+              </h4>
+              <p>Followers: {followers}</p>
+              <p>Following: {following}</p>
+            </div>
           </div>
         </a>
       </div>

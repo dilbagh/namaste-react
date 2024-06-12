@@ -7,7 +7,11 @@ import useOnlineState from '../utils/useOnlineState';
 const FilterButton = (props) => {
   const { title, onClick, disabled = false } = props;
   return (
-    <button className="filter-btn" onClick={onClick} disabled={disabled}>
+    <button
+      className="bg-orange-100 px-2 mx-1 rounded-md shadow-md hover:shadow-lg hover:shadow-gray-300"
+      onClick={onClick}
+      disabled={disabled}
+    >
       {title}
     </button>
   );
@@ -41,8 +45,10 @@ const Home = () => {
 
   const searchFilter = (searchText) => {
     setFilteredRestInfo(
-      restInfo.filter((restaurant) =>
-        restaurant.info.name.toLowerCase().includes(searchText)
+      restInfo.filter(
+        (restaurant) =>
+          restaurant.info.name.toLowerCase().includes(searchText) ||
+          restaurant.info.cuisines.join(' ').toLowerCase().includes(searchText)
       )
     );
     setFilterStatus(`Search Results: ${searchText}`);
@@ -59,25 +65,27 @@ const Home = () => {
 
   if (!online) {
     return (
-      <div className="body">
-        <h1>‼️ You're not connected to the internet.</h1>
+      <div className="flex justify-center">
+        <h1 className="font-bold text-lg text-red-500">
+          ‼️ You're not connected to the internet. ‼️
+        </h1>
       </div>
     );
   }
 
   return (
-    <div className="body">
-      <div className="filters">
+    <div>
+      <div className="flex my-2 justify-center">
         <Search onSearch={searchFilter} />
         <FilterButton title="Top Rated Restaurants" onClick={topRatedFilter} />
         <FilterButton title="Clear Filters" onClick={clearFilter} />
       </div>
-      <div className="filter-status-container">
-        {filterStatus.length > 0 && (
+      {filterStatus.length > 0 && (
+        <div className="flex justify-center my-2 pt-3 font-bold text-orange-500">
           <h3 className="filter-status">{filterStatus}</h3>
-        )}
-      </div>
-      <div className="restaurant-container">
+        </div>
+      )}
+      <div className="flex flex-wrap m-2 p-2 justify-center">
         {!restInfo.length && <ShimmerRestaurants />}
         {filteredRestInfo.map((restaurant) => (
           <RestaurantCard key={restaurant.info.id} resInfo={restaurant.info} />

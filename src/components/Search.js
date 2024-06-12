@@ -21,18 +21,21 @@ const Search = (props) => {
   };
 
   return (
-    <>
+    <div className="mx-1">
       <input
-        className="search-input"
+        className="border px-1 rounded-s-md shadow-md"
         type="text"
         value={searchText}
         onChange={onChange}
         onKeyDown={onEnter}
       />
-      <button className="search-btn" onClick={onSubmit}>
+      <button
+        className="bg-orange-100 px-2 rounded-e-md shadow-md"
+        onClick={onSubmit}
+      >
         Search
       </button>
-    </>
+    </div>
   );
 };
 
