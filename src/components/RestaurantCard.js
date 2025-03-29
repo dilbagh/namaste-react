@@ -7,8 +7,8 @@ const RestaurantCard = (props) => {
     resInfo;
   return name ? (
     <div className="m-2 p-2 w-52 min-h-64 border rounded-lg bg-orange-100 hover:shadow-md hover:shadow-gray-500">
-      {promo && promo}
       <Link to={`/restaurants/${id}`}>
+        {promo && promo}
         <img
           className="h-32 w-full rounded-lg"
           src={getCDNImage(cloudinaryImageId)}
